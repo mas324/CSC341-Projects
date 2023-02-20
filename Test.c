@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 
 int main(int argc, char argv[])
 {
-    char* x = "12345678";
-    printf("%lu", sizeof(x));
+    char* x = "-la";
+    printf("%d", !(15868));
 }

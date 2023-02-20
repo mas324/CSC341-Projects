@@ -16,19 +16,34 @@ int main (int argc, char* argv[]) {
     if (argc > 1) {
         if ((argc == 2) && (argv[1][0] != '-')) {
             psDir = argv[1];
-        } else {
+        } else if (!strcmp(argv[1], "-la") || !strcmp(argv[1], "-al")) {
+                exTime = 1;
+                exFile = 1;
+                if (argc == 3) {
+                    psDir = argv[2];
+                }
+        } else if (argc <= 4) {
             for (int i = 1; i < argc; i++) {
-                if (argv[i][0] == '-') {
-                    if (argv[i][1] == 'l') {
-                        exTime++;
-                    } else if (argv[i][1] == 'a') {
-                        exFile++;
-                    } else {
-                        printf("usage: ls [-l|-a] location");
-                        return 1;
+                if ((strlen(argv[i]) == 2) && (argv[i][0] == '-')) {
+                    switch (argv[i][1]) {
+                        case 'l':
+                            exTime = 1;
+                            break;
+                        case 'a':
+                            exFile = 1;
+                            break;
+                        default:
+                            printf("usage: ls [-l|-a] location\n");
+                            return 1;
                     }
+                } else {
+                    psDir = argv[i];
+                    break;
                 }
             }
+        } else {
+            printf("usage: ls [-l|-a] location\n");
+            return 1;
         }
     }
 
