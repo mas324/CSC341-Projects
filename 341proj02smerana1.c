@@ -48,6 +48,15 @@ int main (int argc, char* argv[]) {
     }
 
     dirp = opendir(psDir);
+
+    if (dirp == NULL) {
+        stat(dirp, &buf);
+        printf("%s\t%s", dirp, ctime(&(buf.st_mtime)));
+    }
+
+
+
+
     for (dp = readdir(dirp); dp != NULL; dp = readdir(dirp)) {
         stat(dp->d_name, &buf);
 
@@ -62,5 +71,6 @@ int main (int argc, char* argv[]) {
         }
     }
     closedir(dirp);
+
     return 0;
 }
