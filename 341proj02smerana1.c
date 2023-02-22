@@ -50,12 +50,10 @@ int main (int argc, char* argv[]) {
     dirp = opendir(psDir);
 
     if (dirp == NULL) {
-        stat(dirp, &buf);
-        printf("%s\t%s", dirp, ctime(&(buf.st_mtime)));
+        stat(psDir, &buf);
+        printf("%s\t%s", psDir, ctime(&(buf.st_mtime)));
+        return 0;
     }
-
-
-
 
     for (dp = readdir(dirp); dp != NULL; dp = readdir(dirp)) {
         stat(dp->d_name, &buf);
