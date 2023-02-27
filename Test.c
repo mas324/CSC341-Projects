@@ -3,6 +3,6 @@
 
 int main(int argc, char argv[])
 {
-    char* x = "-la";
-    printf("%d", !(15868));
+    char* x = "-";
+    printf("%ld\n", strlen(x));
 }
