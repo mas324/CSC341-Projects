@@ -1,0 +1,57 @@
+Script started on 2023-02-26 22:55:52-08:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="195" LINES="13"]
+[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ gcc 341proj02smerana1.c -o ls.out[K[K[K[K.out
+[?2004l[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ ./ls.out [K
+[?2004l341proj02smerana1.log
+23Feb.c
+mycp0.c
+a.out
+21Feb.c
+mycp1.c
+341proj02smerana1.c
+Test.c
+14Feb.c
+ls.out
+[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ ./la[Ks.out -la[K
+[?2004l341proj02smerana1.log	Sun Feb 26 22:55:52 2023
+23Feb.c	Sun Feb 26 19:37:32 2023
+mycp0.c	Thu Feb  9 21:19:38 2023
+a.out	Sun Feb 26 22:37:48 2023
+21Feb.c	Sun Feb 26 19:37:32 2023
+mycp1.c	Thu Feb  9 21:19:47 2023
+341proj02smerana1.c	Sun Feb 26 22:43:06 2023
+Test.c	Sun Feb 26 22:22:43 2023
+14Feb.c	Sun Feb 26 19:37:32 2023
+ls.out	Sun Feb 26 22:56:23 2023
+[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ ./ls.out -la
+[?2004lusage: ls [-l|-a] location
+341proj02smerana1.log	Sun Feb 26 22:55:52 2023
+23Feb.c	Sun Feb 26 19:37:32 2023
+mycp0.c	Thu Feb  9 21:19:38 2023
+.	Sun Feb 26 22:56:23 2023
+.git	Sun Feb 26 22:35:55 2023
+.gitignore	Sun Feb 19 16:34:35 2023
+a.out	Sun Feb 26 22:37:48 2023
+21Feb.c	Sun Feb 26 19:37:32 2023
+mycp1.c	Thu Feb  9 21:19:47 2023
+341proj02smerana1.c	Sun Feb 26 22:43:06 2023
+..	Thu Feb  9 21:11:24 2023
+Test.c	Sun Feb 26 22:22:43 2023
+14Feb.c	Sun Feb 26 19:37:32 2023
+ls.out	Sun Feb 26 22:56:23 2023
+.vscode	Sun Feb 19 16:34:11 2023
+[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ ./s[Kls.out 341proj02smerana1.c
+[?2004l341proj02smerana1.c
+[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ ./ls.out 341proj02smerana1.c[C[C[C[C 341proj02smerana1.c- 341proj02smerana1.cl 341proj02smerana1.c
+[?2004l341proj02smerana1.c	Sun Feb 26 22:43:06 2023
+[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ ./ls.out -o -p -q Test.c 
+[?2004lusage: ls [-l|-a] location
+[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ [K]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ [K]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ ./ls.out -loa
+[?2004l-loa
+[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ ./ls.out -loa teoa[K[Ks
+[?2004l-loa
+[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ ./ls.out -loa tes[1P[1@ [1@-[C[C tes- tesa tes[1P tess tes
+[?2004lusage: ls [-l|-a] location
+[?2004h]0;mm@mm-VirtualBox: ~/Documents/Git/CSC341-Projects[01;32mmm@mm-VirtualBox[00m:[01;34m~/Documents/Git/CSC341-Projects[00m$ exit
+[?2004lexit
+
+Script done on 2023-02-26 23:08:17-08:00 [COMMAND_EXIT_CODE="1"]
