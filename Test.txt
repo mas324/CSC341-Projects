@@ -11,3 +11,5 @@ what's the main difference between io bound process vs cpu bound process > numbe
 process control block contains info associated with a specific process > process state, program counter, registers, ...
 memory controller
 process-consumer > buffers | input/output
+DMA
+lecture notes | drawings | homework | quizes
