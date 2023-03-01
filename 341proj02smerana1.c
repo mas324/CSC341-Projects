@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 int main (int argc, char* argv[]) {
     DIR *dirp;
@@ -37,7 +38,7 @@ int main (int argc, char* argv[]) {
                             break;
                         default:
                             printf("usage: ls [-l|-a] location\n");
-                            return 1;
+                            exit(1);
                     }
                 } else {
                     psDir = argv[i];
@@ -46,7 +47,7 @@ int main (int argc, char* argv[]) {
             }
         } else {
             printf("usage: ls [-l|-a] location\n");
-            return 1;
+            exit(1);
         }
     }
 
@@ -54,6 +55,12 @@ int main (int argc, char* argv[]) {
 
     if (dirp == NULL) { //if the given path is a file then parse as file
         stat(psDir, &buf);
+        printf("%s\t%s", psDir, ctime(&(buf.st_mtime)));
+        exit(0);
+    }
+
+    for (dp = readdir(dirp); dp != NULL; dp = readdir(dirp)) {
+        stat(dp->d_name, &buf);
         if (exTime) {
             printf("%s\t%s", psDir, ctime(&(buf.st_mtime)));
         } else {
@@ -63,9 +70,9 @@ int main (int argc, char* argv[]) {
         for (dp = readdir(dirp); dp != NULL; dp = readdir(dirp)) {
             stat(dp->d_name, &buf);
 
-            if (!exFile && (dp->d_name[0] == '.')) {
-                continue;
-            } 
+        if (!exFile && (dp->d_name[0] == '.')) {
+            continue;
+        }
 
             if (exTime) {
                 printf("%s\t%s", dp->d_name, ctime(&(buf.st_mtime)));
@@ -75,5 +82,6 @@ int main (int argc, char* argv[]) {
         }
     }
     closedir(dirp);
-    return 0;
+
+    exit(0);
 }
