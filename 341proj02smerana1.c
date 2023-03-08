@@ -52,7 +52,6 @@ int main (int argc, char* argv[]) {
     }
 
     dirp = opendir(psDir);
-
     if (dirp == NULL) { //if the given path is a file then parse as file
         stat(psDir, &buf);
         printf("%s\t%s", psDir, ctime(&(buf.st_mtime)));
@@ -70,10 +69,9 @@ int main (int argc, char* argv[]) {
     } else {
         for (dp = readdir(dirp); dp != NULL; dp = readdir(dirp)) {
             stat(dp->d_name, &buf);
-
             if (!exFile && (dp->d_name[0] == '.')) {
                 continue;
-            } 
+            }
 
             if (exTime) {
                 printf("%s\t%s", dp->d_name, ctime(&(buf.st_mtime)));
