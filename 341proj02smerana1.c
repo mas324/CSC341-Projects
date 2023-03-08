@@ -66,13 +66,14 @@ int main (int argc, char* argv[]) {
         } else {
             printf("%s\n", psDir);
         }
+        exit(0);
     } else {
         for (dp = readdir(dirp); dp != NULL; dp = readdir(dirp)) {
             stat(dp->d_name, &buf);
 
-        if (!exFile && (dp->d_name[0] == '.')) {
-            continue;
-        }
+            if (!exFile && (dp->d_name[0] == '.')) {
+                continue;
+            } 
 
             if (exTime) {
                 printf("%s\t%s", dp->d_name, ctime(&(buf.st_mtime)));
@@ -82,6 +83,5 @@ int main (int argc, char* argv[]) {
         }
     }
     closedir(dirp);
-
-    exit(0);
+    return 0;
 }
