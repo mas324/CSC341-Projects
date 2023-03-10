@@ -8,8 +8,8 @@ int main(int argc, char* argv[])
     pid = fork();
 
     if (pid == 0) {
-        char* vector[] = {"/bin/ls", NULL};
-        execvp(vector[0], vector + 1);
+        char* vector[] = {"ls", "-la", "/home", NULL};
+        execvp(vector[0], vector);
         perror("Errored out");
     } else if (pid < 0) {
         printf("Something went wrong\n");

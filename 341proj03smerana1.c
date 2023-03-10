@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <wait.h>
 
@@ -17,35 +18,56 @@ void parse(char* cmd) {
     int i = 0;
     // fill myargv
     myargv[i++] = strtok(cmd, WHITE); //call 1st with whitespace
-    printf("%s\n", myargv[i-1]);
+    //printf("%s\n", myargv[i-1]);
     //then nulls
     while (i < MAXARG && (myargv[i++] = strtok(NULL, WHITE)) != NULL) {
-        printf("%s\n", myargv[i-1]);
+        //printf("%s\n", myargv[i-1]);
     }
 }
 
 int main() {
-    int pid;
+    __pid_t pid;
+    int pid_status = -1;
+    char cmd[MAXLINE];
 
     while (1) {
-        char cmd[MAXLINE];
-        printf("Enter a string to parse: ");
-        fgets(cmd,MAXLINE,stdin);
+        printf("Enter string to parse: ");
+        fgets(cmd, MAXLINE, stdin);
         parse(cmd);
 
-        pid = fork();
+        if (!(strcmp(myargv[0], "logout") && strcmp(myargv[0], "exit"))) {
+            printf("Terminating shell...\n");
+            exit(EXIT_SUCCESS);
+            break;
+        }
 
-        if (pid == 0) { //Am child
-            printf("I am child %d of parent %d\n", getpid(), getppid());
-            int status = execvp(myargv[0], myargv + 1);
-            printf("Exiting\n");
-            _exit(status);
+        pid = fork();
+        int bg = 0;
+        for (size_t i = 0; myargv[i] != NULL; i++) {
+            bg = strcmp("&", myargv[i]) ? 0 : 1;
+            if (bg) {
+                myargv[i] = NULL;
+                break;
+            }
         }
-        if (pid < 0) { //Am parent
+        
+        if (pid == 0) { // Child process
+            if (execvp(myargv[0], myargv) != 0) {
+                perror("Process error: ");
+                _exit(EXIT_FAILURE);
+            } else {
+                _exit(EXIT_SUCCESS);
+            }
+        } else if (pid < 0) { // Process error
             fprintf(stderr, "Fork failed\n");
-            exit(1);
-        }
+            exit(EXIT_FAILURE);
+        } else { // Parent process
+            printf("Parent %d\n", getpid());
+            if (bg) {
+                sleep(1);
+            } else {
+                waitpid(pid, &pid_status, 0);
+            }
+        }        
     }
-    printf("Parent says my pid=%d and my parent's pid=%d\n", getpid(), getppid());
-    exit(0);
 }
