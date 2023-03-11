@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <wait.h>
+#include <errno.h>
 
 #define WHITE "\t \n"
 #define MAXARG 20
@@ -28,17 +29,25 @@ void parse(char* cmd) {
 int main() {
     __pid_t pid;
     int pid_status = -1;
+    int terminate;
     char cmd[MAXLINE];
+    printf("New shell started\ntype 'exit' or 'logout' to terminate\n\n");
+    
 
-    while (1) {
-        printf("Enter string to parse: ");
-        fgets(cmd, MAXLINE, stdin);
+    while (!(terminate = 0)) {
+        printf("user@nshell:$ ");
+        if (fgets(cmd, MAXLINE, stdin) == NULL) {
+            printf("an error has occured: %s", strerror(errno));
+            continue;
+        }
         parse(cmd);
 
         if (!(strcmp(myargv[0], "logout") && strcmp(myargv[0], "exit"))) {
             printf("Terminating shell...\n");
+            terminate = 1;
             exit(EXIT_SUCCESS);
-            break;
+            continue;
+            break; // Really making sure that the program exits the loop
         }
 
         pid = fork();
@@ -46,7 +55,7 @@ int main() {
         for (size_t i = 0; myargv[i] != NULL; i++) {
             bg = strcmp("&", myargv[i]) ? 0 : 1;
             if (bg) {
-                myargv[i] = NULL;
+                myargv[i] = NULL; // Replace '&' with NULL so that exec can accept
                 break;
             }
         }
@@ -59,15 +68,16 @@ int main() {
                 _exit(EXIT_SUCCESS);
             }
         } else if (pid < 0) { // Process error
-            fprintf(stderr, "Fork failed\n");
+            fprintf(stderr, "Fork failed reason: %s\n", strerror(errno));
             exit(EXIT_FAILURE);
         } else { // Parent process
-            printf("Parent %d\n", getpid());
-            if (bg) {
-                sleep(1);
+            //printf("Parent %d\n", getpid()); // Used for debugging
+            if (bg) { // If '&' was used create process into background
+                printf("Process %d created\n", pid); // Tells pid of child without waiting to finish
             } else {
-                waitpid(pid, &pid_status, 0);
+                waitpid(pid, &pid_status, 0); // Wait for child process to finish
             }
         }        
     }
+    exit(EXIT_SUCCESS);
 }
