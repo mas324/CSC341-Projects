@@ -1,8 +1,10 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <wait.h>
+#include <errno.h>
 
 #define WHITE "\t \n"
 #define MAXARG 20
@@ -17,35 +19,65 @@ void parse(char* cmd) {
     int i = 0;
     // fill myargv
     myargv[i++] = strtok(cmd, WHITE); //call 1st with whitespace
-    printf("%s\n", myargv[i-1]);
+    //printf("%s\n", myargv[i-1]);
     //then nulls
     while (i < MAXARG && (myargv[i++] = strtok(NULL, WHITE)) != NULL) {
-        printf("%s\n", myargv[i-1]);
+        //printf("%s\n", myargv[i-1]);
     }
 }
 
 int main() {
-    int pid;
+    __pid_t pid;
+    int pid_status = -1;
+    int terminate;
+    char cmd[MAXLINE];
+    printf("New shell started\ntype 'exit' or 'logout' to terminate\n\n");
+    
 
-    while (1) {
-        char cmd[MAXLINE];
-        printf("Enter a string to parse: ");
-        fgets(cmd,MAXLINE,stdin);
+    while (!(terminate = 0)) {
+        printf("user@nshell:$ ");
+        if (fgets(cmd, MAXLINE, stdin) == NULL) {
+            printf("an error has occured: %s", strerror(errno));
+            continue;
+        }
         parse(cmd);
 
-        pid = fork();
+        if (!(strcmp(myargv[0], "logout") && strcmp(myargv[0], "exit"))) {
+            printf("Terminating shell...\n");
+            terminate = 1;
+            exit(EXIT_SUCCESS);
+            continue;
+            break; // Really making sure that the program exits the loop
+        }
 
-        if (pid == 0) { //Am child
-            printf("I am child %d of parent %d\n", getpid(), getppid());
-            int status = execvp(myargv[0], myargv + 1);
-            printf("Exiting\n");
-            _exit(status);
+        pid = fork();
+        int bg = 0;
+        for (size_t i = 0; myargv[i] != NULL; i++) {
+            bg = strcmp("&", myargv[i]) ? 0 : 1;
+            if (bg) {
+                myargv[i] = NULL; // Replace '&' with NULL so that exec can accept
+                break;
+            }
         }
-        if (pid < 0) { //Am parent
-            fprintf(stderr, "Fork failed\n");
-            exit(1);
-        }
+        
+        if (pid == 0) { // Child process
+            if (execvp(myargv[0], myargv) != 0) {
+                perror("Process error: ");
+                _exit(EXIT_FAILURE);
+            } else {
+                _exit(EXIT_SUCCESS);
+            }
+        } else if (pid < 0) { // Process error
+            fprintf(stderr, "Fork failed reason: %s\n", strerror(errno));
+            exit(EXIT_FAILURE);
+        } else { // Parent process
+            //printf("Parent %d\n", getpid()); // Used for debugging
+            if (bg) { // If '&' was used create process into background
+                printf("Process %d created\n", pid); // Tells pid of child without waiting to finish
+            } else {
+                waitpid(pid, &pid_status, 0); // Wait for child process to finish
+            }
+        }        
     }
-    printf("Parent says my pid=%d and my parent's pid=%d\n", getpid(), getppid());
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
