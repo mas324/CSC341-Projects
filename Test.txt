@@ -1,0 +1,13 @@
+user mode / kernel mode
+apps    /   os | hardware
+system calls
+monolithic | ex linux/dos | hard to modify but faster
+structured os | layered | easier to modify but slower
+process is in execution/running
+program is just a file/code to run
+cpu scheduling
+interprocess coms | shared memory | pipes
+what's the main difference between io bound process vs cpu bound process > number of io requests
+process control block contains info associated with a specific process > process state, program counter, registers, ...
+memory controller
+process-consumer > buffers | input/output

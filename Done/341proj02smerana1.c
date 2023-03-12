@@ -54,11 +54,18 @@ int main (int argc, char* argv[]) {
     dirp = opendir(psDir);
     if (dirp == NULL) { //if the given path is a file then parse as file
         stat(psDir, &buf);
+        printf("%s\t%s", psDir, ctime(&(buf.st_mtime)));
+        exit(0);
+    }
+
+    for (dp = readdir(dirp); dp != NULL; dp = readdir(dirp)) {
+        stat(dp->d_name, &buf);
         if (exTime) {
             printf("%s\t%s", psDir, ctime(&(buf.st_mtime)));
         } else {
             printf("%s\n", psDir);
         }
+        exit(0);
     } else {
         for (dp = readdir(dirp); dp != NULL; dp = readdir(dirp)) {
             stat(dp->d_name, &buf);
