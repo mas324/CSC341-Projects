@@ -1,3 +1,10 @@
+/*
+Merana Shawn
+Project 03
+smerana1
+341proj03smerana1.c
+*/
+
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,7 +17,6 @@
 #define MAXARG 20
 #define MAXLINE 80
 
-extern char* sys_errlist[];
 extern int errno;
 
 char* myargv[MAXARG];
@@ -35,14 +41,14 @@ int main() {
     
 
     while (!(terminate = 0)) {
-        printf("user@nshell:$ ");
-        if (fgets(cmd, MAXLINE, stdin) == NULL) {
+        printf("user@myshell:$ ");
+        if (fgets(cmd, MAXLINE, stdin) == NULL) { // If somehow reading in fails report
             printf("an error has occured: %s", strerror(errno));
             continue;
         }
         parse(cmd);
 
-        if (!(strcmp(myargv[0], "logout") && strcmp(myargv[0], "exit"))) {
+        if (!(strcmp(myargv[0], "logout") && strcmp(myargv[0], "exit"))) { // Exit shell
             printf("Terminating shell...\n");
             terminate = 1;
             exit(EXIT_SUCCESS);
@@ -52,7 +58,7 @@ int main() {
 
         pid = fork();
         int bg = 0;
-        for (size_t i = 0; myargv[i] != NULL; i++) {
+        for (size_t i = 0; myargv[i] != NULL; i++) { // Check if '&' is an argument
             bg = strcmp("&", myargv[i]) ? 0 : 1;
             if (bg) {
                 myargv[i] = NULL; // Replace '&' with NULL so that exec can accept
