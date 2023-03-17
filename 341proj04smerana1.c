@@ -15,7 +15,7 @@ compile with gcc -D_REENTERANT -lpthread ...
 #include <pthread.h>
 
 
-int _THREAD_MAX = 4; // Create max allowable threads
+int _THREAD_MAX = 3; // Create max allowable threads
 
 char * thread_error ( int error ); 
 /*  thread_errlist - only works for thread_create and thread_join
@@ -28,7 +28,7 @@ char * thread_error ( int error );
 void * thread(void * arg);
 /* write two messages to the screen (stdout).
 *    write the first message 
-*    sleeps ifor some time (see nap function) 
+*    sleeps for some time (see nap function) 
 *    writes the second message
 */
 
@@ -38,7 +38,7 @@ int verbose=0;  // do we output are sleeping habits ?
 /*
 *  The sleep function
 */
-#define SLEEPVALUE rand()%(long)(1000000-100+1)+100
+#define SLEEPVALUE rand()%(long)(1000000)+100
 void nap(void * who){
     long sleepTime = SLEEPVALUE;
     if(verbose)
@@ -88,7 +88,7 @@ int main (int argc, char ** argv)  {
     semInit();
 
     /* start max threads */
-    for(i=0;i<_THREAD_MAX;i++){
+    for(i = 0; i < _THREAD_MAX; i++){
         if (0 != (retcode = pthread_create(&th[i], NULL, thread, th_n[i]))){
             fprintf(stderr, "creating thread %s a failed %s\n", 
             th_n[i], thread_error(retcode));
@@ -97,7 +97,7 @@ int main (int argc, char ** argv)  {
     } 
 
     /* wait for the max threads to finnish */
-    for(i=0;i<_THREAD_MAX;i++){
+    for(i = 0; i < _THREAD_MAX; i++){
         if (0 != (retcode = pthread_join(th[i], &retval))){
             fprintf(stderr, "join a failed for thread %s %s\n", 
             th_n[i], thread_error(retcode));
@@ -108,7 +108,7 @@ int main (int argc, char ** argv)  {
 
 static struct sembuf WAIT = {0, -1, SEM_UNDO};
 static struct sembuf SIG = {0, 1, SEM_UNDO};
-int ROUNDS = 5;
+int ROUNDS = 3;
 
 void * thread(void * arg) {
     int i, retcode;
