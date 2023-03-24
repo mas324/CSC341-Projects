@@ -1,3 +1,13 @@
+/*
+*   Shawn Merana
+*   Project 04
+*   smerana1
+*   341proj04smerana1.c
+*   
+*   Create threads and use semaphores to prevent deadlocks and smooth operation
+*   of a program
+**/
+
 /* Creates three threads.
 Each thread will write the following two messages three times to the screen.
 Message one is:   start processid, thread number, round number
