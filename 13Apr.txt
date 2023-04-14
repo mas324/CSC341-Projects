@@ -1,0 +1,3 @@
+cpu scheduling
+first in first out fifo/fcfs
+shortest job first sjf
