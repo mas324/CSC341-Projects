@@ -355,7 +355,7 @@ public class DiningPhilosopher {
 
     public static void main(String[] args) {
 
-        DiningPhilosopher t = new DiningPhilosopher();
+        new DiningPhilosopher();
         // Initialize states and chopsticks
         for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
             states[i] = pState.THINKING;
