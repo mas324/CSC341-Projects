@@ -86,14 +86,22 @@ public class DiningPv2 {
                 System.exit(-1);
 
             switch (s[who]) {
-                case STARTING: return String.valueOf(who);
-                case THINKING: return "...";
-                case HUNGRY: return "H";
-                case LCHOP: return "<";
-                case RCHOP: return ">";
-                case EATING: return "nom";
-                case SLEEPING: return "zzz";
-                default: return String.valueOf(who);
+                case STARTING:
+                    return String.valueOf(who);
+                case THINKING:
+                    return "...";
+                case HUNGRY:
+                    return "H";
+                case LCHOP:
+                    return "<";
+                case RCHOP:
+                    return ">";
+                case EATING:
+                    return "nom";
+                case SLEEPING:
+                    return "zzz";
+                default:
+                    return String.valueOf(who);
             }
         }
     }
