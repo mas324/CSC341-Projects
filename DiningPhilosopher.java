@@ -1,5 +1,9 @@
 
 /*
+ * Shawn Merana
+ * proj05
+ * smerana1
+ *
  * A version of the Dinning Philosophers Problem
  * In Java with Jave Threads 
  * It has an ASCII art display (its own thread)
@@ -27,7 +31,7 @@ public class DiningPhilosopher {
     private static final int Delay = 5000; // 2500;
 
     // Random generator
-    private static final Random RAND = new Random(2023);
+    private static final Random RAND = new Random();
 
     // Number of philosophers
     private static final int NUM_PHILOSOPHERS = 4;
@@ -45,6 +49,11 @@ public class DiningPhilosopher {
 
     // Semaphores for display
     static Semaphore talk = new Semaphore(1);
+
+    private static Philosopher[] p;
+
+    // Timer
+    private static long timer;
 
     /***********************
      * 
@@ -111,9 +120,9 @@ public class DiningPhilosopher {
                 world[2] = "        ---          .".toCharArray();
                 world[3] = "      /     \\        .".toCharArray();
                 world[4] = " (1) |  (+)  | (0)   .".toCharArray();
-                world[5] = "     \\      /        .".toCharArray();
+                world[5] = "      \\     /        .".toCharArray();
                 world[6] = "        ---          .".toCharArray();
-                world[7] = "    /        \\       .".toCharArray();
+                world[7] = "    /         \\      .".toCharArray();
                 world[8] = "        (2)          .".toCharArray();
                 System.out.print("\033[2J"); // clear the screen
                 talk.release();
@@ -194,7 +203,7 @@ public class DiningPhilosopher {
                     c = id;
                     break;
                 case THINKING:
-                    c = 192 + ((int) (Math.random() * 100) % 6);
+                    c = 192 + (RAND.nextInt(100) % 6);
                     break; // 192-198 Latin A with grave/acute/circumflex/tilda/diaerese/ring
                 case HUNGRY:
                     c = 'H';
@@ -206,10 +215,10 @@ public class DiningPhilosopher {
                     c = '>';
                     break;
                 case EATING:
-                    c = 200 + ((int) (Math.random() * 100) % 4);
+                    c = 200 + (RAND.nextInt(100) % 4);
                     break; // 200-203 Latin E with grave, acute, circumflex, or diaerese;
                 case SLEEPING:
-                    int tmp = ((int) (Math.random() * 100) % 4); // sequence through 4 values
+                    int tmp = (RAND.nextInt(100) % 4); // sequence through 4 values
                     c = (tmp == 0) ? 's' : (tmp == 1) ? 'S' : 167;// (tmp==2)?138:167; // 's', 'S', S with caron or
                                                                   // Section sign
                     break;
@@ -365,9 +374,13 @@ public class DiningPhilosopher {
         // start display of table
         new table(board).start();
 
+        p = new Philosopher[NUM_PHILOSOPHERS];
+
+        timer = System.currentTimeMillis();
         // Start philosophers
         for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
-            new Philosopher(i).start();
+            p[i] = new Philosopher(i);
+            p[i].start();
         }
     }
 
@@ -379,30 +392,52 @@ public class DiningPhilosopher {
         }
 
         public void run() {
-            while (true) {
+            boolean done = false;
+            while (!done) {
                 for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
                     board.setPhilosopher(i, states[i]);
                     board.display();
                 }
+
+                for (int x = 0; x < NUM_PHILOSOPHERS; x++) {
+                    if (!p[x].done) {
+                        done = false;
+                        break;
+                    } else
+                        done = true;
+                }
+                if (done) {
+                    timer = System.currentTimeMillis() - timer;
+                    break;
+                }
+
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            System.out.println("\033[2J Program run time was " + (timer / 1000) + " seconds.");
         }
-
     }
 
     public static class Philosopher extends Thread {
         private int id;
         private static boolean special = false;
         private boolean chosen;
+        private boolean done;
         private int cycle;
-        private final int ROUNDS = 5;
+        private final int ROUNDS = 3;
 
         public Philosopher(int id) {
+            chosen = false;
+            done = false;
+            cycle = 0;
             this.id = id;
+        }
+
+        public boolean getDone() {
+            return done;
         }
 
         public void run() {
@@ -421,6 +456,8 @@ public class DiningPhilosopher {
                 think();
                 cycle++;
             }
+
+            done = true;
         }
 
         private void sleep() {
@@ -449,8 +486,8 @@ public class DiningPhilosopher {
             states[id] = pState.HUNGRY;
             board.message(false, "Philosopher[" + id + "]: HUNGRY");
             try {
-                // OE(left, right);
-                reverse(left, right);
+                OE(left, right); // this is faster, using this
+                // reverse(left, right); // this is slower
 
                 Thread.sleep(RAND.nextInt(2 * Delay));
                 chopsticks[right].release();
@@ -466,7 +503,6 @@ public class DiningPhilosopher {
         }
 
         private void reverse(int left, int right) throws InterruptedException {
-            Thread.sleep(RAND.nextLong(Delay / 2));
             if (!special || chosen) {
                 special = chosen = true;
                 pickup(right, left);
@@ -501,44 +537,3 @@ public class DiningPhilosopher {
         }
     }
 }
-
-/*
- * ----------------------
- * \ /
- * \ ( ) /
- * ---
- * / \
- * ( ) | (+) | ( )
- * \ /
- * ---
- * / \
- * / ( ) \
- * 
- * $ - sleeping
- * # - thinking
- * h - hungry
- * E - eating
- * 
- * |(E)|
- * | |
- * ---
- * / \
- * ( ) | (+) | ( )
- * \ /
- * ---
- * / \
- * / ( ) \
- * 
- * 
- * \
- * \ ( )
- * ---
- * / \ --
- * ( ) | (+) | (E)
- * \ / --
- * ---
- * /
- * / ( )
- * 
- * ----------------------
- */
