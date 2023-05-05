@@ -1,5 +1,6 @@
 public class Main {
     final static int delay = 10000;
+
     public static void main(String[] args) {
         DiningPhilosophersMonitor monitor = new DiningPhilosophersMonitor();
         Philosopher[] philosophers = new Philosopher[5];
@@ -41,5 +42,30 @@ public class Main {
             }
         }
     }
-}
 
+    static class DiningPhilosophersMonitor {
+
+        int[] state = new int[5];
+
+        public void pickup(int id) {
+            state[id] = 0;
+
+            test(id);
+
+            while (state[id] != 1)
+                ;
+        }
+
+        public void putdown(int id) {
+            state[id] = 2;
+            test((id + 1) % 5);
+            test((id + 4) % 5);
+        }
+
+        private void test(int id) {
+            if (state[(id + 1) % 5] != 1 && state[(id + 4) % 5] != 1 && state[id] == 0) {
+                state[id] = 1;
+            }
+        }
+    }
+}
